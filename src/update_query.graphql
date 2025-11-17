@@ -1,0 +1,41 @@
+mutation UpdateProduct(
+  $id: ID!
+  $category: ID!
+  $collections: [ID!]
+  $seoTitle: String!
+  $seoDescription: String!
+  $specifications: String!
+  $summary: String!
+  $color: String!
+  $application: String!
+  $material: String!
+  $width: String!
+  $discontinued: String!
+) {
+  productUpdate(
+    input: {
+      id: $id
+      category: $category
+      collectionsToJoin: $collections
+      seo: { title: $seoTitle, description: $seoDescription }
+      metafields: [
+        { namespace: "custom", key: "specifications", type: "rich_text_field", value: $specifications }
+        { namespace: "custom", key: "summary", type: "rich_text_field", value: $summary }
+        { namespace: "product", key: "color", type: "list.single_line_text_field", value: $color }
+        { namespace: "product", key: "application", type: "list.single_line_text_field", value: $application }
+        { namespace: "product", key: "material", type: "list.single_line_text_field", value: $material }
+        { namespace: "product", key: "width", type: "list.single_line_text_field", value: $width }
+        { namespace: "product", key: "discontinued", type: "boolean", value: $discontinued }
+      ]
+    }
+  ) {
+    product {
+      id
+      title
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}

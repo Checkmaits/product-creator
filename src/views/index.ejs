@@ -1,0 +1,148 @@
+<%- include("partials/header") %>
+<div id="app">
+  <header class="header border-bottom">
+    <div class="container text-center py-3">
+      <h1 class="h5 fw-bold mb-0">Product Creator (Fabric)</h1>
+    </div>
+  </header>
+  <main class="main">
+    <div class="container py-5">
+      <div class="row align-items-start">
+        <div class="col-12 col-md-6 border-end pe-reset pe-md-5">
+          <h2 class="h5 fw-bold mb-4">Product Template</h2>
+          <div v-if="createError" class="alert alert-danger mb-4">{{ createError }}</div>
+          <div v-if="createLoading" class="spinner spinner-border text-primary"></div>
+          <form v-else @submit.prevent="handleCreateSubmit">
+            <div class="row align-items-start mb-3">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <div class="form-group">
+                  <label class="mb-1">Name: <span class="text-danger fw-bold">*</span></label>
+                  <input type="text" v-model="name" class="form-control" />
+                </div>
+              </div>
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <div class="form-group">
+                  <label class="mb-1">Vendor: <span class="text-danger fw-bold">*</span></label>
+                  <input type="text" v-model="vendor" class="form-control" />
+                </div>
+              </div>
+            </div>
+            <div class="row align-items-start mb-3">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <div class="form-group">
+                  <label class="mb-1">Collections: <span class="text-danger fw-bold">*</span></label>
+                  <input type="text" v-model="collections" class="form-control" />
+                </div>
+              </div>
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
+                <div class="form-group">
+                  <label class="mb-1">Product Type: <span class="text-danger fw-bold">*</span></label>
+                  <input type="text" v-model="productType" class="form-control" />
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <label class="mb-1">Description: <span class="text-danger fw-bold">*</span></label>
+              <textarea id="description" @change="(event) => description = event.target.value"></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label class="mb-1">Specifications: <span class="text-danger fw-bold">*</span></label>
+              <textarea id="specifications" @change="(event) => specifications = event.target.value"></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label class="mb-1">Summary: <span class="text-danger fw-bold">*</span></label>
+              <textarea v-model="summary" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="form-group mb-3">
+              <label class="mb-1">SEO Meta Description: <span class="text-danger fw-bold">*</span></label>
+              <textarea v-model="seoMetaDescription" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="row align-items-start mb-4">
+              <div class="col-12 col-md mb-3 mb-md-0">
+                <div class="form-group">
+                  <label class="mb-1">Application: <span class="text-danger fw-bold">*</span></label>
+                  <input type="text" v-model="application" class="form-control" />
+                </div>
+              </div>
+              <div class="col-12 col-md mb-3 mb-md-0">
+                <div class="form-group">
+                  <label class="mb-1">Material: <span class="text-danger fw-bold">*</span></label>
+                  <input type="text" v-model="material" class="form-control" />
+                </div>
+              </div>
+              <div class="col-12 col-md mb-3 mb-md-0">
+                <div class="form-group">
+                  <label class="mb-1">Width: <span class="text-danger fw-bold">*</span></label>
+                  <input type="text" v-model="width" class="form-control" />
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-outline-success rounded-pill w-100">Create products</button>
+          </form>
+        </div>
+        <div class="col-12 col-md-6 position-sticky top-0 ps-reset ps-md-5">
+          <h2 class="h5 fw-bold mb-4">Products</h2>
+          <form @submit.prevent="handleFetchSubmit" class="mb-3">
+            <div class="form-group">
+              <label class="mb-1">Category: <span class="text-danger fw-bold">*</span></label>
+              <div class="d-flex align-items-center gap-3">
+                <input
+                  type="text"
+                  v-model="category"
+                  class="form-control"
+                  placeholder="https://jtsoutdoorfabrics.com/arrivalresidentialupholstey"
+                />
+                <button type="submit" class="btn btn-outline-primary rounded-pill">Submit</button>
+              </div>
+            </div>
+          </form>
+          <div v-if="productsError" class="alert alert-danger mb-4">{{ productsError }}</div>
+          <div v-if="productsLoading" class="spinner spinner-border text-primary"></div>
+          <div v-else class="faux-table bg-light border" style="height: 450px; overflow-y: auto">
+            <div class="faux-table-header border-bottom bg-white">
+              <div class="row align-items-start px-3 py-2">
+                <div class="col-2">Image</div>
+                <div class="col-7">Product Details</div>
+                <div class="col-2">Color</div>
+                <div class="col-1">Disc.</div>
+              </div>
+            </div>
+            <div class="faux-table-body p-3">
+              <div v-if="products.length > 0" class="d-flex flex-column align-items-start gap-3">
+                <div v-for="product in products" class="row align-items-center">
+                  <div class="col-2">
+                    <a :href="product.image" target="_blank">
+                      <img :src="product.image" class="w-100" />
+                    </a>
+                  </div>
+                  <div class="col-7">
+                    <div class="d-flex flex-column align-items-start">
+                      <span class="fw-bold small">{{ product.name }}</span>
+                      <span class="text-muted small">
+                        {{ product.sku }} • Cost: {{ product.cost }} • Price: {{ product.price }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-2">
+                    <input type="text" class="form-control" @change="(event) => product.color = event.target.value" />
+                  </div>
+                  <div class="col-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      @change="(event) => product.discontinued = event.target.value === 'on' ? true : false"
+                    />
+                  </div>
+                </div>
+              </div>
+              <span v-else>
+                <i>No products found...</i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<%- include("partials/footer") %>

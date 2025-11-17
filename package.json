@@ -1,0 +1,26 @@
+{
+  "name": "product-creator",
+  "version": "0.0.1",
+  "description": "A simple web app that helps migrate products from Shift4Shop to Shopify.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "watch": "nodemon src/index.js"
+  },
+  "license": "ISC",
+  "author": "Brock M. Mowry",
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
+    "dompurify": "^3.3.0",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "jsdom": "^27.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
