@@ -19,4 +19,4 @@ app.use("/system", express.static(path.join(__dirname, "..", "node_modules")));
 app.use("/", routes);
 
 const port = 9000;
-app.listen(port, () => console.log(`[Product Creator]: App listening on port ${port}...`));
+app.listen(port, "0.0.0.0", () => console.log(`[Product Creator]: App listening on port ${port}...`));

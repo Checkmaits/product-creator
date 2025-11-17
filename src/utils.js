@@ -1,4 +1,5 @@
 import { HtmlToShopifyRichText } from "./HtmlToShopifyRichText.js";
+import ennisImages from "./ennis_images.json" with {type: "json"};
 
 export async function getProductDetails(catalogId) {
   const response = await fetch(`https://apirest.3dcart.com/3DCartWebAPI/v2/Products/${catalogId}`, {
@@ -25,6 +26,9 @@ export async function getProductDetails(catalogId) {
 }
 
 export async function createProduct(product) {
+  const ennisImage = getEnnisImage(product.sku);
+  console.log(ennisImage);
+
   const response = await fetch(`${process.env.SHOPIFY_API_REQUEST_URL}/products.json`, {
     method: "POST",
     headers: {
@@ -37,7 +41,7 @@ export async function createProduct(product) {
         body_html: product.description,
         vendor: product.vendor,
         product_type: product.type,
-        images: [{ src: product.image, alt: `${product.name} Image` }],
+        images: [{ src: ennisImage ? ennisImage : product.image, alt: `${product.name} Image` }],
         variants: [
           {
             sku: product.sku,
@@ -119,9 +123,13 @@ export async function createProduct(product) {
       },
     }),
   });
-  const updateResponseData = await updateResponse.json();
-  console.log(updateResponseData);
+
   if (!updateResponse.ok) throw new Error(`Failed to update product: ${updateResponse.statusText}`);
 
   return shopifyProduct;
+}
+
+export function getEnnisImage(sku) {
+  const found = ennisImages.find((i) => i.sku === sku);
+  return found && found.ennis_image !== "-" ? found.ennis_image : null;
 }

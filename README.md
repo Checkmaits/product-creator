@@ -11,3 +11,7 @@ This app allows everyone on the JT’s team help with the Shopify migration. Shi
 1. Express.js — The entire app is encompassed inside of an Express app. Shift4Shop's API only allows fetching from a server-side environment.
 2. Vue.js (CDN) — The frontend is written in Vue.js (included via a CDN). This allows near-full Vue.js functionality without having two seperate apps.
 3. REST + GraphQL — Shopify's REST Admin API is quite limited nowadays. The apps uses a combination of both REST and GraphQL for a complete system.
+
+## 📸 Screenshots
+
+![Screenshot](./Screenshot%202025-11-17%20at%201.09.21 PM.png)
